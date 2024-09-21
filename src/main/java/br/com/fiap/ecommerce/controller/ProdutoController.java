@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,30 +31,37 @@ public class ProdutoController {
     private ProdutoService produtoService;
 
     @GetMapping
-    public List<ProdutoResponseDto> list() {
+    public ResponseEntity<List<ProdutoResponseDto>> list() {
         List<ProdutoResponseDto> dtos = produtoService.list()
             .stream()
             .map(e -> new ProdutoResponseDto().toDto(e))
             .toList();
         
-        return dtos;
+        return ResponseEntity.ok().body(dtos);
     }
 
     @PostMapping
-    public ProdutoResponseDto create(@RequestBody ProdutoRequestCreateDto dto) {        
-        return new ProdutoResponseDto().toDto(
-                produtoService.save(dto.toModel()));
+    public ResponseEntity<ProdutoResponseDto> create(@RequestBody ProdutoRequestCreateDto dto) {        
+        return ResponseEntity
+        		.status(HttpStatus.CREATED)
+        		.body(
+        			new ProdutoResponseDto().toDto(
+        					produtoService.save(dto.toModel()))
+        			);
     }
 
     @PutMapping("{id}")
-    public ProdutoResponseDto update(
+    public ResponseEntity<ProdutoResponseDto> update(
                         @PathVariable Long id, 
                         @RequestBody ProdutoRequestUpdateDto dto) {
         if (! produtoService.existsById(id)){
             throw new RuntimeException("Id inexistente");
         }                
-        return new ProdutoResponseDto().toDto(
-                produtoService.save(dto.toModel(id)));
+        return ResponseEntity.ok()
+        		.body(
+        			new ProdutoResponseDto().toDto(
+        				produtoService.save(dto.toModel(id)))
+        		);
     }
     
     @DeleteMapping("{id}")
@@ -64,11 +74,14 @@ public class ProdutoController {
     }
 
     @GetMapping("{id}")
-    public ProdutoResponseDto findById(@PathVariable Long id) {    	
-    	return produtoService
-    			.findById(id)
-    			.map(e -> new ProdutoResponseDto().toDto(e))
-    			.orElseThrow(() -> new RuntimeException("Id inexistente"));
+    public ResponseEntity<ProdutoResponseDto> findById(@PathVariable Long id) {    	
+    	return ResponseEntity.ok()
+    			.body(
+    				produtoService
+    					.findById(id)
+    					.map(e -> new ProdutoResponseDto().toDto(e))
+    					.orElseThrow(() -> new RuntimeException("Id inexistente"))
+    			);
     	  		     
     }
 
