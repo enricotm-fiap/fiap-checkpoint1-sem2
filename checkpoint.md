@@ -15,5 +15,5 @@
 
 ![](assets/images/mer.png)
 
-#### 2. (_ 7 pontos_) - Implementar as classes de service, controller e DTOs para realização de operações CRUD.
+#### 2. (_7 pontos_) - Implementar as classes de service, controller e DTOs para realização de operações CRUD.
 
