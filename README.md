@@ -1,16 +1,6 @@
 # E-commerce
 
-## Checkpoint 1
-
-
-
-
-
-
-
 ## Database
-
-![](assets/images/mer.png)
 
 * Mysql (local)
 
